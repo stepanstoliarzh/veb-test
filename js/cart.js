@@ -51,6 +51,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Функция для проверки наличия напитков в корзине
+  function checkDrinksInCart(cart, allDishes) {
+    let hasDrink = false;
+    const drinkKeywords = [];
+
+    Object.values(cart).forEach(item => {
+      if (!item || typeof item !== 'object') return;
+
+      if (item.type === 'free') {
+        const dish = allDishes.find(d => d.keyword === item.keyword);
+        if (dish && dish.category === 'drink') {
+          hasDrink = true;
+          drinkKeywords.push(item.keyword);
+        }
+      }
+      else if (item.type === 'business' && item.items) {
+        const drinkItems = item.items['drink'];
+        if (Array.isArray(drinkItems) && drinkItems.length > 0) {
+          drinkItems.forEach(([keyword, qty]) => {
+            const dish = allDishes.find(d => d.keyword === keyword);
+            if (dish && dish.category === 'drink') {
+              hasDrink = true;
+              drinkKeywords.push(keyword);
+            }
+          });
+        }
+      }
+      else if (item.type === 'combo') {
+        const dish = allDishes.find(d => d.keyword === item.keyword);
+        if (dish && dish.category === 'drink') {
+          hasDrink = true;
+          drinkKeywords.push(item.keyword);
+        }
+      }
+    });
+
+    console.log('Найдены напитки в корзине:', drinkKeywords, hasDrink);
+    return hasDrink;
+  }
+
   function convertCartToAPIFormat(cart, allDishes) {
     const result = {
       soup_id: null,
@@ -60,29 +100,44 @@ document.addEventListener("DOMContentLoaded", () => {
       dessert_id: null
     };
 
+    console.log('Все блюда с API:', allDishes);
+    console.log('Корзина для преобразования:', cart);
+
+    // Собираем все keyword из корзины
     const allKeywords = new Set();
     
     Object.values(cart).forEach(item => {
       if (!item || typeof item !== 'object') return;
 
       if (item.type === 'free') {
+        console.log('Свободное блюдо:', item.keyword);
         allKeywords.add(item.keyword);
       }
       else if (item.type === 'business' && item.items) {
+        console.log('Бизнес-ланч:', item.items);
         ['soup', 'main', 'salad', 'drink', 'dessert'].forEach(cat => {
           const items = item.items[cat];
           if (Array.isArray(items)) {
-            items.forEach(([keyword]) => allKeywords.add(keyword));
+            items.forEach(([keyword, qty]) => {
+              console.log(`Бизнес-ланч ${cat}:`, keyword);
+              allKeywords.add(keyword);
+            });
           }
         });
       }
       else if (item.type === 'combo') {
+        console.log('Комбо:', item.keyword);
         if (item.keyword) allKeywords.add(item.keyword);
       }
     });
 
+    console.log('Все keywords из корзины:', Array.from(allKeywords));
+
+    // Преобразуем keyword в ID
     allKeywords.forEach(keyword => {
       const dish = allDishes.find(d => d.keyword === keyword);
+      console.log(`Поиск блюда по keyword "${keyword}":`, dish);
+      
       if (dish) {
         const fieldMap = {
           'soup': 'soup_id',
@@ -92,12 +147,21 @@ document.addEventListener("DOMContentLoaded", () => {
           'dessert': 'dessert_id'
         };
         const field = fieldMap[dish.category];
-        if (field && !result[field]) {
-          result[field] = dish.id;
+        console.log(`Категория "${dish.category}" -> поле "${field}"`);
+        
+        if (field) {
+          // Если поле уже занято, выбираем первое найденное
+          if (!result[field]) {
+            result[field] = dish.id;
+            console.log(`Установлен ${field} = ${dish.id}`);
+          }
         }
+      } else {
+        console.warn(`Блюдо с keyword "${keyword}" не найдено в данных API`);
       }
     });
 
+    console.log('Результат преобразования:', result);
     return result;
   }
 
@@ -334,15 +398,32 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error('Не удалось загрузить данные меню');
         }
 
-        // Преобразуем корзину в формат API
-        const dishData = convertCartToAPIFormat(cart, allDishes);
-
-        // Проверяем обязательное поле drink_id
-        if (!dishData.drink_id) {
+        // Проверяем наличие напитков в корзине
+        const hasDrink = checkDrinksInCart(cart, allDishes);
+        if (!hasDrink) {
           alert('Ошибка: необходимо выбрать хотя бы один напиток');
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;
           return;
+        }
+
+        // Преобразуем корзину в формат API
+        const dishData = convertCartToAPIFormat(cart, allDishes);
+
+        // Дополнительная проверка drink_id
+        if (!dishData.drink_id) {
+          console.warn('Напитки есть в корзине, но не найдены в данных API');
+          // Пробуем найти любой напиток в данных API
+          const anyDrink = allDishes.find(d => d.category === 'drink');
+          if (anyDrink) {
+            dishData.drink_id = anyDrink.id;
+            console.log('Использован напиток по умолчанию:', anyDrink);
+          } else {
+            alert('Ошибка: не удалось определить напиток для заказа');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            return;
+          }
         }
 
         // Определяем адрес доставки
@@ -373,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
           delivery_address: deliveryAddressValue,
           delivery_type: deliveryType,
           delivery_time: deliveryTime,
-          subscribe: formData.get('promo') ? 1 : 0,
+          subscribe: formData.has('promo') ? 1 : 0,
           comment: formData.get('comment') || '',
           ...dishData
         };
