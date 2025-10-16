@@ -1,6 +1,10 @@
 // js/cart.js
 document.addEventListener("DOMContentLoaded", () => {
 
+  // ======== API КОНСТАНТЫ ========
+  const API_KEY = 'd81cdbfb-4744-4d11-aafb-1417de1e1937';
+  const API_BASE_URL = 'https://edu.std-900.ist.mospolytech.ru/labs/api';
+
   // ======== УТИЛИТЫ ========
   window.loadCart = function() {
     try {
@@ -34,6 +38,90 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("cart");
     window.updateCartBadge();
   };
+
+  // ======== API ФУНКЦИИ ========
+  async function loadDishesFromAPI() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/dishes?api_key=${API_KEY}`);
+      if (!response.ok) throw new Error('Ошибка загрузки блюд');
+      return await response.json();
+    } catch (error) {
+      console.error('API Error:', error);
+      return [];
+    }
+  }
+
+  function convertCartToAPIFormat(cart, allDishes) {
+    const result = {
+      soup_id: null,
+      main_course_id: null, 
+      salad_id: null,
+      drink_id: null,
+      dessert_id: null
+    };
+
+    const allKeywords = new Set();
+    
+    Object.values(cart).forEach(item => {
+      if (!item || typeof item !== 'object') return;
+
+      if (item.type === 'free') {
+        allKeywords.add(item.keyword);
+      }
+      else if (item.type === 'business' && item.items) {
+        ['soup', 'main', 'salad', 'drink', 'dessert'].forEach(cat => {
+          const items = item.items[cat];
+          if (Array.isArray(items)) {
+            items.forEach(([keyword]) => allKeywords.add(keyword));
+          }
+        });
+      }
+      else if (item.type === 'combo') {
+        if (item.keyword) allKeywords.add(item.keyword);
+      }
+    });
+
+    allKeywords.forEach(keyword => {
+      const dish = allDishes.find(d => d.keyword === keyword);
+      if (dish) {
+        const fieldMap = {
+          'soup': 'soup_id',
+          'main': 'main_course_id',
+          'salad': 'salad_id',
+          'drink': 'drink_id',
+          'dessert': 'dessert_id'
+        };
+        const field = fieldMap[dish.category];
+        if (field && !result[field]) {
+          result[field] = dish.id;
+        }
+      }
+    });
+
+    return result;
+  }
+
+  async function submitOrderToAPI(orderData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/orders?api_key=${API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Order API Error:', error);
+      throw error;
+    }
+  }
 
   // ======== ОТОБРАЖЕНИЕ КОРЗИНЫ ========
   function renderCart() {
@@ -116,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         wrap.innerHTML += `
           <div class="cart-item">
-            <img src="lunch/business.jpg" alt="Бизнес ланч" class="cart-item-img">
+            <img src="images/business.jpg" alt="Бизнес ланч" class="cart-item-img">
             <div class="cart-item-info">
               <h4>Бизнес-ланч</h4>
               ${listHtml}
@@ -150,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     totalBox.textContent = "Итого: " + sum + " руб.";
-  } // ← закрываем renderCart()
+  }
 
   // ======== ИЗМЕНЕНИЕ КОЛИЧЕСТВА / УДАЛЕНИЕ ========
   const wrap = document.getElementById("cart-items");
@@ -182,7 +270,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const changeRow = document.getElementById("change-row");
   const timeRadios = document.querySelectorAll("input[name='time']");
   const timeSelect = document.getElementById("time-select");
+  const orderForm = document.querySelector(".order-form");
 
+  // Обработчики видимости полей
   delivery?.addEventListener("change", () => {
     if (delivery.value === "pickup") {
       pickupAddress.classList.remove("hidden");
@@ -210,6 +300,122 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // ОБРАБОТЧИК ОТПРАВКИ ФОРМЫ НА API
+  if (orderForm) {
+    orderForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = orderForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      
+      // Блокируем кнопку
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Отправка...';
+
+      try {
+        // Получаем данные формы
+        const formData = new FormData(orderForm);
+        
+        // Загружаем текущую корзину
+        const cart = window.loadCart();
+        
+        // Проверяем, что корзина не пуста
+        if (Object.keys(cart).length === 0) {
+          alert('Корзина пуста! Добавьте товары перед оформлением заказа.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          return;
+        }
+
+        // Загружаем данные блюд с API
+        const allDishes = await loadDishesFromAPI();
+        if (allDishes.length === 0) {
+          throw new Error('Не удалось загрузить данные меню');
+        }
+
+        // Преобразуем корзину в формат API
+        const dishData = convertCartToAPIFormat(cart, allDishes);
+
+        // Проверяем обязательное поле drink_id
+        if (!dishData.drink_id) {
+          alert('Ошибка: необходимо выбрать хотя бы один напиток');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          return;
+        }
+
+        // Определяем адрес доставки
+        let deliveryAddressValue = '';
+        if (formData.get('delivery') === 'delivery') {
+          deliveryAddressValue = formData.get('address') || '';
+        } else {
+          deliveryAddressValue = 'Самовывоз: ' + (formData.get('pickup') || 'Москва, ул. Здоровая, 15');
+        }
+
+        // Определяем тип доставки и время
+        const deliveryType = formData.get('time') === 'soon' ? 'now' : 'by_time';
+        const deliveryTime = formData.get('time') === 'custom' ? formData.get('time-input') : null;
+
+        // Проверяем время доставки для типа by_time
+        if (deliveryType === 'by_time' && !deliveryTime) {
+          alert('Пожалуйста, укажите время доставки');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          return;
+        }
+
+        // Собираем полные данные заказа
+        const orderData = {
+          full_name: formData.get('name') || '',
+          email: formData.get('email') || '',
+          phone: formData.get('phone') || '',
+          delivery_address: deliveryAddressValue,
+          delivery_type: deliveryType,
+          delivery_time: deliveryTime,
+          subscribe: formData.get('promo') ? 1 : 0,
+          comment: formData.get('comment') || '',
+          ...dishData
+        };
+
+        // Проверяем обязательные поля
+        if (!orderData.full_name || !orderData.email || !orderData.phone || !orderData.delivery_address) {
+          alert('Пожалуйста, заполните все обязательные поля');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          return;
+        }
+
+        console.log('Отправка заказа:', orderData);
+
+        // Отправляем заказ на API
+        const result = await submitOrderToAPI(orderData);
+        
+        // Успешное оформление
+        alert('✅ Заказ успешно оформлен! Номер заказа: ' + (result.id || 'получен'));
+        
+        // Очищаем корзину
+        window.clearCart();
+        
+        // Обновляем отображение
+        renderCart();
+        
+        // Сбрасываем форму
+        orderForm.reset();
+        
+        // Перенаправляем на главную через 2 секунды
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Ошибка оформления заказа:', error);
+        alert('❌ Ошибка при оформлении заказа:\n' + error.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+  }
 
   // ======== ИНИЦИАЛИЗАЦИЯ ========
   updateCartBadge();
