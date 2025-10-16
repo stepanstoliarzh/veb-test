@@ -1,0 +1,185 @@
+.cart-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+  margin: 30px auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.order-info, .cart-box, .cart-empty-box {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.cart-page h2 {
+  border: none;
+  padding-left: 0;
+}
+
+/* Форма */
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.order-form .form-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-form label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.order-form input,
+.order-form textarea,
+.order-form select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.order-form textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.order-form button {
+  background: #2a7d2e;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.order-form button:hover {
+  background: #256c28;
+}
+
+/* Корзина */
+.cart-item {
+  display: flex;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.cart-item-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h4 {
+  margin: 0 0 5px;
+  font-size: 16px;
+}
+
+.cart-item-info p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 5px;
+}
+
+.qbtn {
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.qval {
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-item-price {
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+}
+
+.remove-btn:hover {
+  color: #d00;
+}
+
+#cart-items {
+  flex-grow: 1;
+}
+
+#cart-total {
+  margin-top: auto;
+  font-weight: bold;
+  text-align: right;
+  padding-top: 10px;
+}
+
+/* Пустая корзина */
+.cart-empty-box {
+  grid-column: 1 / -1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 400px;
+}
+
+.cart-empty-img { width: 120px; margin-bottom: 20px; opacity: 0.8; }
+.cart-empty-text { font-size: 20px; margin-bottom: 15px; }
+
+.cart-empty-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: #2a7d2e;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.cart-empty-btn:hover { background: #256c28; }
+
+/* скрытые блоки */
+.hidden {
+  display: none !important;
+}

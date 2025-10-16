@@ -1,0 +1,545 @@
+/* Сброс и универсальные настройки */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Шрифт для всей страницы */
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+    background-color: #fafafa;
+}
+
+/* Шапка */
+header {
+    position: sticky; top: 0;
+    background-color: white;
+    padding: 12px;
+    text-align: center;
+    border-bottom: 2px solid #e5e5e5;
+    z-index: 10;
+    position: relative;
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #2a7d2e;
+}
+
+nav {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+nav a {
+    color: #2a7d2e;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #2a7d2e;
+    color: #fff;
+}
+nav a:hover::after {
+    width: 100%;
+}
+
+/* Логотип */
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logo img {
+    width: 100px;
+    height: auto;
+    display: block;
+}
+
+.logo h1 {
+    font-size: 34px;
+    margin: 0;
+}
+
+/* Основной контент */
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+section {
+    margin-bottom: 50px;
+}
+
+section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #2a7d2e;
+    border-left: 5px solid #2a7d2e;
+    padding-left: 10px;
+}
+
+/* Изображения */
+section img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Преимущества */
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    margin: 10px 0;
+    padding-left: 25px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='%232a7d2e' viewBox='0 0 16 16'><path d='M13.485 1.929a1 1 0 0 1 0 1.414l-7.07 7.071-3.536-3.536a1 1 0 1 1 1.414-1.415L6.829 8.07l6.364-6.364a1 1 0 0 1 1.414 0z'/></svg>") no-repeat left center;
+    background-size: 18px;
+}
+
+/* Таблица меню */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #2a7d2e;
+    color: white;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Футер */
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+footer a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Форма обратной связи */
+#feedback {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#feedback h2 {
+    margin-bottom: 20px;
+    color: #2a7d2e;
+    text-align: center;
+}
+
+#feedback form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#feedback label {
+    font-weight: bold;
+}
+
+#feedback input,
+#feedback select,
+#feedback textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+#feedback input:focus,
+#feedback select:focus,
+#feedback textarea:focus {
+    border-color: #2a7d2e;
+    box-shadow: 0 0 5px rgba(42,125,46,0.3);
+    outline: none;
+}
+
+#feedback button {
+    background-color: #2a7d2e;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#feedback button:hover {
+    background-color: #256c28;
+    transform: translateY(-2px);
+}
+
+/* Страница входа */
+.auth {
+  height: 100vh;
+  background: url("../images/back.png") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.auth-form {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 35px;
+    border-radius: 12px;
+    width: 340px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.auth-form h2 {
+    margin-bottom: 25px;
+    color: #2a7d2e;
+}
+
+.auth-form label {
+    display: block;
+    margin-top: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.auth-form input:focus {
+    border-color: #0077cc;
+    box-shadow: 0 0 5px rgba(0,119,204,0.3);
+    outline: none;
+}
+
+.auth-form button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.auth-form button:hover {
+    background-color: #005fa3;
+    transform: translateY(-2px);
+}
+
+.auth-form {
+    animation: fadeIn 0.7s ease-out;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Логотип */
+.auth-logo img {
+    width: 90px;   
+    height: auto;
+    display: block;
+    margin: 0 auto 10px; 
+}
+
+/* Пароль с кнопкой */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.show-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 22px;
+    color: #777;
+    user-select: none;
+    transition: color 0.3s;
+}
+
+.show-password:hover {
+    color: #2a7d2e;
+    opacity: 0.8;
+}
+
+/* Соцсети */
+.social-login {
+    margin-top: 20px;
+    text-align: center;
+}
+.social-login p {
+    margin-bottom: 10px;
+    color: #666;
+}
+.social-login button {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+.social-login button:hover {
+    transform: scale(1.05);
+}
+.social-login .google {
+    background: #db4437;
+}
+
+.social-login .google:hover {
+    background: #c1351d; 
+}
+
+.social-login .vk {
+    background: #4c75a3;
+}
+
+.social-login .vk:hover {
+    background: #3b5c82;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    font-weight: normal;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    width: auto;
+}
+
+.home-button {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #2a7d2e;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.home-button:hover {
+    background-color: #256c28;
+    transform: translateY(-2px);
+}
+
+html, body {
+  height: 100%;       
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column; 
+}
+
+main {
+  flex: 1; 
+}
+
+/* корзина */
+.cart-link {
+  top: 15px;
+  right: 30px;
+}
+
+.cart-link .cart-icon {
+  width: 75px;   
+  height: 75px;  
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #e53935;
+  color: #fff;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.dish-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px;
+  display: inline-block;
+  width: 180px;
+  text-align: center;
+  vertical-align: top;
+  transition: 0.3s;
+}
+
+.dish-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.dish-card.selected {
+  border: 2px solid #2a7d2e;
+}
+
+.dish-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.add-btn {
+  background: #2a7d2e;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  background: #1d5a21;
+}
+
+.order-block {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Адаптив таблицы на главной */
+@media (max-width: 400px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+    width: 100%;
+  }
+  thead { display: none; }
+  tr { margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+  td { display: flex; justify-content: space-between; padding: 5px 0; }
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 10px;
+  }
+}
+
+.header-actions {
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-actions .cart-link,
+.header-actions .user-link {
+  position: static;
+}
+
+.user-icon {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+}
+
+.filters {
+  margin-bottom: 10px;
+}
+.filters button {
+  background: #f1eee9;
+  border: 1px solid #ccc;
+  padding: 5px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.filters button.active {
+  background: #1d5a21;
+  color: #fff;
+}

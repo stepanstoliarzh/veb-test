@@ -1,0 +1,64 @@
+/* Общие стили для печати */
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #000;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Скрываем лишние элементы */
+nav,
+button,
+.home-button,
+.social-login,
+.show-password {
+    display: none !important;
+}
+
+/* Сохраняем только полезный контент */
+header, main, footer {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Картинки блюд */
+.dish img {
+    width: 150px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+/* Заголовки */
+h1, h2 {
+    text-align: left;
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+/* Тексты в карточке */
+.dish .price {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.dish .name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dish .weight {
+    font-size: 12px;
+    color: #555;
+}
+
+/* Убираем тени и границы у карточек */
+.dish {
+    box-shadow: none;
+    border: none;
+    filter: none;
+    padding: 10px;
+}

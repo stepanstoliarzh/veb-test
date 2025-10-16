@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FreshLunch — Собрать ланч</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/lunch.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+  <div class="logo">
+    <img src="images/logo.svg" alt="FreshLunch">
+    <h1>FreshLunch</h1>
+  </div>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="lunch.html" class="active">Собрать ланч</a>
+  </nav>
+  <div class="header-actions">
+    <a href="auth.html" class="user-link" aria-label="Вход">
+      <img src="images/user.svg" alt="Вход" class="user-icon">
+    </a>
+    <a href="cart.html" class="cart-link" aria-label="Корзина">
+        <img src="images/cart.svg" alt="Корзина" class="cart-icon">
+        <span class="cart-count">0</span>
+    </a>
+  </div>
+  </header>
+
+  <main>
+    <!-- выбор режима -->
+    <section id="mode-select" class="mode-select">
+      <h2>Выберите режим</h2>
+      <div class="mode-buttons">
+        <button class="mode-btn" data-mode="business">
+          <span class="mode-title">Бизнес-ланч</span>
+          <span class="mode-sub">Суп, главное, напиток, салат, десерт</span>
+        </button>
+        <button class="mode-btn" data-mode="combo">
+          <span class="mode-title">Комбо</span>
+          <span class="mode-sub">Готовые наборы</span>
+        </button>
+        <button class="mode-btn" data-mode="free">
+          <span class="mode-title">Свободный режим</span>
+          <span class="mode-sub">Любые блюда, до 10 позиций</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- БИЗНЕС-ЛАНЧ -->
+<section id="business" class="hidden">
+  <div class="mode-top">
+    <button class="back-btn" data-back>← Назад</button>
+    <div class="counter">
+      <span class="label">Количество бизнес-ланчей:</span>
+      <button type="button" class="cnt-btn" data-bminus>−</button>
+      <span class="cnt-val" data-bcount>0</span>
+      <button type="button" class="cnt-btn" data-bplus>+</button>
+      <span class="hint-inline">макс. 10</span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- ВАЖНО: id="steps" -->
+    <div id="steps" class="layout-main">
+      <section>
+        <h2><span class="badge">Шаг 1</span> Супы</h2>
+        <div id="grid-soup" class="dishes-grid"></div>
+      </section>
+      <section>
+        <h2><span class="badge">Шаг 2</span> Главные блюда</h2>
+        <div id="grid-main" class="dishes-grid"></div>
+      </section>
+      <section>
+        <h2><span class="badge">Шаг 3</span> Напитки</h2>
+        <div id="grid-drink" class="dishes-grid"></div>
+      </section>
+      <section>
+        <h2><span class="badge">Шаг 4</span> Салаты/стартеры</h2>
+        <div id="grid-salad" class="dishes-grid"></div>
+      </section>
+      <section>
+        <h2><span class="badge">Шаг 5</span> Десерты</h2>
+        <div id="grid-dessert" class="dishes-grid"></div>
+      </section>
+    </div>
+
+    <!-- ВАЖНО: id="order-box" -->
+    <aside id="order-box" class="order-box">
+      <h3>Ваш выбор</h3>
+      <div class="ob-section">
+        <div class="ob-title">Супы</div>
+        <ul data-list="soup"></ul>
+      </div>
+      <div class="ob-section">
+        <div class="ob-title">Главные блюда</div>
+        <ul data-list="main"></ul>
+      </div>
+      <div class="ob-section">
+        <div class="ob-title">Напитки</div>
+        <ul data-list="drink"></ul>
+      </div>
+      <div class="ob-section">
+        <div class="ob-title">Салаты</div>
+        <ul data-list="salad"></ul>
+      </div>
+      <div class="ob-section">
+        <div class="ob-title">Десерты</div>
+        <ul data-list="dessert"></ul>
+      </div>
+      <div class="ob-total">Итого: <span data-bsum>0₽</span></div>
+      <button class="btn-primary" data-badd>Добавить в корзину</button>
+    </aside>
+  </div>
+</section>
+
+    <!-- СВОБОДНЫЙ РЕЖИМ -->
+    <section id="free" class="hidden">
+      <div class="mode-top">
+        <button class="back-btn" data-back>← Назад</button>
+        <div class="counter">
+          <span class="label">Выбрано позиций:</span>
+          <span class="cnt-val" data-fcount>0</span>
+          <span class="hint-inline">из 10</span>
+        </div>
+      </div>
+
+      <section>
+  <h2>Супы</h2>
+  <div class="filters">
+    <button data-kind="fish">Рыбный</button>
+    <button data-kind="meat">Мясной</button>
+    <button data-kind="veg">Вегетарианский</button>
+  </div>
+  <div id="free-soup" class="dishes-grid"></div>
+</section>
+
+<section>
+  <h2>Главные блюда</h2>
+  <div class="filters">
+    <button data-kind="fish">Рыбные</button>
+    <button data-kind="meat">Мясные</button>
+    <button data-kind="veg">Вегетарианские</button>
+  </div>
+  <div id="free-main" class="dishes-grid"></div>
+</section>
+
+<section>
+  <h2>Напитки</h2>
+  <div class="filters">
+    <button data-kind="cold">Холодные</button>
+    <button data-kind="hot">Горячие</button>
+  </div>
+  <div id="free-drink" class="dishes-grid"></div>
+</section>
+
+<section>
+  <h2>Салаты/стартеры</h2>
+  <div class="filters">
+    <button data-kind="fish">Рыбные</button>
+    <button data-kind="meat">Мясные</button>
+    <button data-kind="veg">Вегетарианские</button>
+  </div>
+  <div id="free-salad" class="dishes-grid"></div>
+</section>
+
+<section>
+  <h2>Десерты</h2>
+  <div class="filters">
+    <button data-kind="small">Маленькая порция</button>
+    <button data-kind="medium">Средняя порция</button>
+    <button data-kind="large">Большая порция</button>
+  </div>
+  <div id="free-dessert" class="dishes-grid"></div>
+</section>
+
+    <section>
+      <h2>Детское меню</h2>
+      <div id="free-kids" class="dishes-grid"></div>
+    </section>
+  </main>
+
+<!-- РЕЖИМ КОМБО  -->
+  <section id="combo" class="hidden">
+  <div class="mode-top">
+    <button class="back-btn" data-back>← Назад</button>
+    <h2>Комбо-наборы FreshLunch</h2>
+  </div>
+  <div class="combo-grid"></div>
+  </section>
+
+  <footer id="contacts">
+    <p>Телефон: <a href="tel:+74950001122">+7 (495) 000-11-22</a></p>
+    <p>Email: <a href="mailto:info@freshlunch.ru">info@freshlunch.ru</a></p>
+    <p>Адрес: Москва, ул. Здоровая, 15</p>
+    <p>© 2025 FreshLunch</p>
+  </footer>
+
+  <script src="js/dishes.js"></script>
+  <script src="js/combos.js"></script>
+  <script src="js/lunch-app.js"></script>
+  
+<!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ -->
+<div id="notify" class="notify-overlay hidden">
+  <div class="notify-window">
+    <p id="notify-text">Текст уведомления</p>
+    <button class="notify-btn" id="notify-btn">Окей</button>
+  </div>
+</div>
+
+</body>
+</html>

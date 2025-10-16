@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshLunch — главная</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/logo.svg" alt="FreshLunch" class="logo-img">
+            <h1>FreshLunch</h1>
+        </div>
+    <nav>
+        <a href="index.html" class="active">Главная</a>
+        <a href="lunch.html">Собрать ланч</a>
+        <a href="#">Контакты</a>
+        <a href="feedback.html">Обратная связь</a>
+        <a href="#">Отзывы</a>
+    </nav>
+    <div class="header-actions">
+        <a href="auth.html" class="user-link" aria-label="Вход">
+        <img src="images/user.svg" alt="Вход" class="user-icon">
+        </a>
+        <a href="cart.html" class="cart-link" aria-label="Корзина">
+        <img src="images/cart.svg" alt="Корзина" class="cart-icon">
+        <span class="cart-count">0</span>
+        </a>
+    </div>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>О нашей компании</h2>
+            <img src="images/image.jpg" alt="Вкусный бизнес-ланч">
+            <p>Компания <b>FreshLunch</b> доставляет вкусные и полезные бизнес-ланчи в офисы Москвы. Мы заботимся о вашем здоровье и экономим ваше время, предлагая разнообразное меню и быстрый сервис.</p>
+        </section>
+
+        <section id="advantages">
+            <h2>Почему выбирают нас</h2>
+            <ul>
+                <li>Быстрая доставка от 30 минут</li>
+                <li>Здоровое и сбалансированное питание</li>
+                <li>Гарантия качества и свежести продуктов</li>
+            </ul>
+        </section>
+
+        <section id="menu">
+            <h2>Наши популярные блюда</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Блюдо</th>
+                        <th>Описание</th>
+                        <th>Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Блюдо">Суп с фрикадельками и овощами</td>
+                        <td data-label="Описание">Горячий суп с вкусным мясом и овощами</td>
+                        <td data-label="Цена">190 ₽</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Блюдо">Овощи на пару с митболами из утки</td>
+                        <td data-label="Описание">Шарики из мяса со свежеми овощами</td>
+                        <td data-label="Цена">330 ₽</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Блюдо">Карбонара с беконом</td>
+                        <td data-label="Описание">Сливочный соус, бекон и пармезан</td>
+                        <td data-label="Цена">270 ₽</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Блюдо">Смузи лесные ягоды</td>
+                        <td data-label="Описание">Смесь ягод из леса</td>
+                        <td data-label="Цена">270 ₽</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Блюдо">Смузи с апельсином, бананом и клубникой</td>
+                        <td data-label="Описание">Смесь свежих фруктов и ягод</td>
+                        <td data-label="Цена">270 ₽</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="js/cart.js"></script>
+
+    <footer id="contacts">
+        <p>Телефон: <a href="tel:+74950001122">+7 (495) 000-11-22</a></p>
+        <p>Email: <a href="mailto:info@freshlunch.ru">info@freshlunch.ru</a></p>
+        <p>Адрес: Москва, ул. Здоровая, 15</p>
+        <p>© 2025 FreshLunch</p>
+    </footer>
+</body>
+</html>
