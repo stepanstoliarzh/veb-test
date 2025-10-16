@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       else if (item.type === 'combo') {
         const dish = allDishes.find(d => d.keyword === item.keyword);
-        if (dish && dish.category === 'drink') {
+        if (dish && ['drink', 'drinks', 'Напитки', 'напитки'].includes(dish.category)) {
           hasDrink = true;
           drinkKeywords.push(item.keyword);
         }
@@ -91,14 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return hasDrink;
   }
 
-  function convertCartToAPIFormat(cart, allDishes) {
-    const result = {
-      soup_id: null,
-      main_course_id: null, 
-      salad_id: null,
-      drink_id: null,
-      dessert_id: null
-    };
+  const fieldMap = {
+  'soup': 'soup_id',
+  'main': 'main_course_id', 
+  'salad': 'salad_id',
+  'drink': 'drink_id',
+  'drinks': 'drink_id',
+  'dessert': 'dessert_id'
+};
 
     console.log('Все блюда с API:', allDishes);
     console.log('Корзина для преобразования:', cart);
