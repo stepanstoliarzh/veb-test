@@ -1,6 +1,6 @@
 // dishes.js
 async function loadDishes() {
-  const API_URL = "https://stepanstoliarzh.github.io/veb/dishes.json";
+  const API_URL = "https://github.com/stepanstoliarzh/veb/blob/main/dishes.json";
   try {
     const response = await fetch(API_URL);
     if (!response.ok) throw new Error("Ошибка загрузки данных: " + response.status);
@@ -9,7 +9,6 @@ async function loadDishes() {
     console.log("✅ Блюда успешно загружены:", data.length);
   } catch (error) {
     console.error("⚠️ Не удалось загрузить блюда, используется резервный список.", error);
-
     // резервные данные, если API недоступно
     window.DISHES = [
       { keyword: 'Lapsha', name: 'Лапша домашняя с курицей', price: 440, category: 'soup', count: '250 мл', image: 'lunch/soup/soup1.jpg', kind: 'meat' },
